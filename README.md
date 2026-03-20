@@ -1,0 +1,62 @@
+# Google AI Studio to Production Skills
+
+Claude Code skills for taking Google AI Studio prototypes to production-ready deployments.
+
+## Overview
+
+Google AI Studio is great for rapid prototyping with Gemini models. But moving from "it works in the playground" to "it runs reliably in production" requires infrastructure, CI/CD, monitoring, and security — all of which these skills automate.
+
+## Skills
+
+| Skill | Description | Trigger Examples |
+|-------|-------------|------------------|
+| [export-from-ai-studio](skills/export-from-ai-studio/) | Extract and structure code from AI Studio exports | "AI Studioからコード持ってきて", "export my AI Studio project" |
+| [repo-initializer-google](skills/repo-initializer-google/) | Initialize a GitHub repo with Google Cloud best practices | "リポジトリ作って", "set up a new repo for my Gemini app" |
+| [cloud-run-deploy](skills/cloud-run-deploy/) | Deploy to Google Cloud Run with production-ready config | "Cloud Runにデプロイして", "deploy this to Cloud Run" |
+| [vercel-railway-deploy](skills/vercel-railway-deploy/) | Deploy to Vercel or Railway | "Vercelにデプロイ", "deploy to Railway" |
+| [ci-cd-github-actions](skills/ci-cd-github-actions/) | Set up GitHub Actions CI/CD pipelines | "CI/CD設定して", "add GitHub Actions" |
+| [monitoring-sentry-datadog](skills/monitoring-sentry-datadog/) | Add monitoring with Sentry and/or Datadog | "監視入れて", "add error tracking", "set up monitoring" |
+| [security-hardening-gcp](skills/security-hardening-gcp/) | Harden GCP security (IAM, Secret Manager, etc.) | "セキュリティ設定して", "secure my GCP deployment" |
+
+## Typical Workflow
+
+```
+AI Studio prototype
+    ↓
+1. export-from-ai-studio     — コードを抽出・整形
+    ↓
+2. repo-initializer-google   — GitHub リポ作成 + 初期構成
+    ↓
+3. cloud-run-deploy           — Cloud Run にデプロイ
+    ↓
+4. ci-cd-github-actions       — CI/CD パイプライン構築
+    ↓
+5. monitoring-sentry-datadog  — 監視・アラート設定
+    ↓
+6. security-hardening-gcp     — セキュリティ強化
+```
+
+## Installation
+
+Add this as a skill source in your Claude Code configuration:
+
+```bash
+claude skill add --source github:takuro/google-ai-studio-to-prod-skills
+```
+
+Or clone and reference locally:
+
+```bash
+git clone https://github.com/takuro/google-ai-studio-to-prod-skills.git
+```
+
+## Requirements
+
+- Claude Code CLI
+- Google Cloud SDK (`gcloud`) — for GCP-related skills
+- GitHub CLI (`gh`) — for repo initialization and CI/CD
+- Node.js 18+ or Python 3.11+ — depending on your AI Studio export
+
+## License
+
+See [LICENSE](LICENSE) for details.
