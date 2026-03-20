@@ -39,6 +39,11 @@ AI Studio prototype
 
 > **Note:** `graduate-from-ai-studio` は `cloud-run-deploy` と `ci-cd-github-actions` の機能を統合しています。個別のスキルは単体でも利用可能です。
 
+## Documentation
+
+- [AI Studio が生成するプロジェクトの構造](docs/ai-studio-project-anatomy.md) — スキルが前提とする共通パターン
+- [graduate スキルの設計判断](docs/graduate-skill-design-decisions.md) — 設計時の判断理由の記録
+
 ## Installation
 
 Add this as a skill source in your Claude Code configuration:
