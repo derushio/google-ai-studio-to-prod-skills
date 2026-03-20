@@ -19,6 +19,7 @@
   "skills": [
     "skills/export-from-ai-studio",
     "skills/repo-initializer-google",
+    "skills/graduate-from-ai-studio",
     "skills/cloud-run-deploy",
     "skills/vercel-railway-deploy",
     "skills/ci-cd-github-actions",

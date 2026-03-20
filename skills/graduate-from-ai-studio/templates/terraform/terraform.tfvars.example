@@ -1,0 +1,14 @@
+project_id            = "your-gcp-project-id"
+region                = "asia-northeast1"
+service_name          = "your-service-name"
+firebase_project_mode = "new"  # "new" or "existing"
+firestore_database_id = ""     # Required if firebase_project_mode is "existing"
+github_repo           = "your-org/your-repo"
+
+env_vars = {
+  "APP_URL" = "https://your-service-name-xxxxx.run.app"
+}
+
+secret_env_vars = {
+  "GEMINI_API_KEY" = "gemini-api-key"
+}

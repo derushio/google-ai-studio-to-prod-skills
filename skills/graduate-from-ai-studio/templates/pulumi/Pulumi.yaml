@@ -1,0 +1,8 @@
+name: {{SERVICE_NAME}}
+runtime: nodejs
+description: Cloud Run deployment for AI Studio graduated project
+config:
+  gcp:project:
+    description: GCP project ID
+  gcp:region:
+    default: asia-northeast1

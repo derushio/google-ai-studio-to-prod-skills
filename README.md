@@ -12,6 +12,7 @@ Google AI Studio is great for rapid prototyping with Gemini models. But moving f
 |-------|-------------|------------------|
 | [export-from-ai-studio](skills/export-from-ai-studio/) | Extract and structure code from AI Studio exports | "AI Studioからコード持ってきて", "export my AI Studio project" |
 | [repo-initializer-google](skills/repo-initializer-google/) | Initialize a GitHub repo with Google Cloud best practices | "リポジトリ作って", "set up a new repo for my Gemini app" |
+| **[graduate-from-ai-studio](skills/graduate-from-ai-studio/)** | **All-in-one: Dockerfile + IaC + CI/CD + Firebase config generation** | **"AI Studioから卒業", "make this independently deployable"** |
 | [cloud-run-deploy](skills/cloud-run-deploy/) | Deploy to Google Cloud Run with production-ready config | "Cloud Runにデプロイして", "deploy this to Cloud Run" |
 | [vercel-railway-deploy](skills/vercel-railway-deploy/) | Deploy to Vercel or Railway | "Vercelにデプロイ", "deploy to Railway" |
 | [ci-cd-github-actions](skills/ci-cd-github-actions/) | Set up GitHub Actions CI/CD pipelines | "CI/CD設定して", "add GitHub Actions" |
@@ -23,18 +24,20 @@ Google AI Studio is great for rapid prototyping with Gemini models. But moving f
 ```
 AI Studio prototype
     ↓
-1. export-from-ai-studio     — コードを抽出・整形
+1. export-from-ai-studio       — コードを抽出・整形
     ↓
-2. repo-initializer-google   — GitHub リポ作成 + 初期構成
+2. repo-initializer-google     — GitHub リポ作成 + 初期構成
     ↓
-3. cloud-run-deploy           — Cloud Run にデプロイ
+3. graduate-from-ai-studio     — ★ 一括卒業 (Dockerfile + IaC + CI/CD + Firebase)
+    ↓                              Terraform / Pulumi / CLI スクリプトから選択
+    ↓                              GitHub Actions 自動デプロイ構築
     ↓
-4. ci-cd-github-actions       — CI/CD パイプライン構築
+4. monitoring-sentry-datadog   — 監視・アラート設定
     ↓
-5. monitoring-sentry-datadog  — 監視・アラート設定
-    ↓
-6. security-hardening-gcp     — セキュリティ強化
+5. security-hardening-gcp      — セキュリティ強化
 ```
+
+> **Note:** `graduate-from-ai-studio` は `cloud-run-deploy` と `ci-cd-github-actions` の機能を統合しています。個別のスキルは単体でも利用可能です。
 
 ## Installation
 
