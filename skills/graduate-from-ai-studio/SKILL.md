@@ -46,6 +46,11 @@ Phase 2: Present choices to user
 
 Phase 3: Present plan → get approval
 
+Phase 3.5: Sanitize firebase-applet-config.json
+  ├── apiKey を削除し、プレースホルダーに置換
+  ├── コード側で環境変数から注入するよう修正
+  └── git history に残っている場合は警告を表示
+
 Phase 4: Generate all files
   ├── Dockerfile (multi-stage) + .dockerignore
   ├── IaC files (based on choice)
@@ -62,7 +67,7 @@ Read the following files and extract configuration:
 
 | File | Extract |
 |------|---------|
-| `firebase-applet-config.json` | `projectId`, `firestoreDatabaseId`, `appId` |
+| `firebase-applet-config.json` | `projectId`, `firestoreDatabaseId`, `appId`, **`apiKey` (要サニタイズ)** |
 | `package.json` / `requirements.txt` | Runtime, dependencies, build script, start script |
 | `server.ts` / `server.js` / `main.py` | Port number, static file serving path, API routes |
 | `firestore.rules` | Security rules (copy as-is) |
@@ -152,6 +157,42 @@ Proceed? (y/n)
 ```
 
 ## Phase 4: File Generation
+
+### firebase-applet-config.json のサニタイズ（Phase 3.5）
+
+AI Studio が生成する `firebase-applet-config.json` には Firebase Web API Key (`apiKey`) が平文で含まれている。これをそのままgitにコミットするとセキュリティリスクになるため、卒業時に必ずサニタイズする。
+
+**手順:**
+
+1. `firebase-applet-config.json` の `apiKey` をプレースホルダーに置換:
+```json
+{
+  "projectId": "your-project-id",
+  "apiKey": "SET_VIA_ENV_VAR",
+  "authDomain": "your-project-id.firebaseapp.com",
+  ...
+}
+```
+
+2. アプリのFirebase初期化コードを修正し、環境変数から `apiKey` を注入:
+```typescript
+import baseConfig from "./firebase-applet-config.json";
+const app = initializeApp({
+  ...baseConfig,
+  apiKey: process.env.FIREBASE_API_KEY,
+});
+```
+
+3. `.env.example` に `FIREBASE_API_KEY=` を追加
+
+4. IaC で Secret Manager に `firebase-api-key` を追加し、Cloud Run の `--set-secrets` で注入
+
+5. git history に既に `apiKey` がコミットされている場合、ユーザーに警告:
+```
+⚠️  firebase-applet-config.json の apiKey が git history に残っています。
+    Google Cloud Console で API Key をローテーションすることを推奨します。
+    手順: https://console.cloud.google.com/apis/credentials
+```
 
 ### Dockerfile
 
@@ -243,6 +284,7 @@ APP_URL=https://your-service-url.run.app
 
 # Added by graduation
 GOOGLE_CLOUD_PROJECT=your-project-id
+FIREBASE_API_KEY=your-firebase-web-api-key
 PORT=3000
 ```
 
@@ -299,7 +341,8 @@ Next steps:
 
 ## Common Mistakes
 
-- **Forgetting `firebase-applet-config.json` in Docker image** — This file is needed at runtime for Firebase SDK init
+- **`firebase-applet-config.json` の `apiKey` をサニタイズせず卒業** — API Key が git history に残り、ローテーションしない限り漏洩リスクが継続する。Phase 3.5 を必ず実行すること
+- **Forgetting `firebase-applet-config.json` in Docker image** — This file is needed at runtime for Firebase SDK init（ただし `apiKey` は環境変数で注入）
 - **Hardcoding AI Studio's `gen-lang-client-*` project ID** — If using a new project, all references must be updated
 - **Not setting `PORT` env var** — Cloud Run injects `PORT`; the app must listen on it
 - **Missing composite indexes** — Firestore queries with multiple `where` or `where` + `orderBy` need indexes

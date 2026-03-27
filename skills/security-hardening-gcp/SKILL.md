@@ -20,7 +20,9 @@ Secure a Gemini API application deployed on GCP. Covers IAM least-privilege, Sec
 | Area | Action | Priority |
 |------|--------|----------|
 | Secrets | API keys in Secret Manager, not env vars | Critical |
+| firebase-applet-config.json | `apiKey` を環境変数化、git history から除去 | Critical |
 | IAM | Dedicated service account with minimal roles | Critical |
+| API Key 制限 | Firebase Web API Key にHTTPリファラー制限を設定 | Critical |
 | Auth | Cloud Run `--no-allow-unauthenticated` for internal services | High |
 | Network | VPC connector if accessing internal resources | High |
 | Logging | Cloud Audit Logs enabled | Medium |
@@ -69,12 +71,34 @@ gcloud run deploy my-gemini-app \
   --set-secrets="GEMINI_API_KEY=gemini-api-key:latest"
 ```
 
+## firebase-applet-config.json の API Key
+
+AI Studio が生成するプロジェクトでは `firebase-applet-config.json` に Firebase Web API Key が平文で含まれる。Firebase Web API Key は本来クライアントサイドで使う前提だが、API Key に利用制限がなければ第三者が悪用可能。
+
+**対策:**
+1. `apiKey` を環境変数に外出し → `export-from-ai-studio` スキル参照
+2. Google Cloud Console → APIs & Services → Credentials で API Key に制限を追加:
+   - アプリケーション制限: HTTP リファラー（自分のドメインのみ許可）
+   - API 制限: 必要な API のみ（Firebase Auth, Firestore, etc.）
+3. git history に残っている場合は Key をローテーション
+
+```bash
+# API Key の一覧確認
+gcloud services api-keys list --project=PROJECT_ID
+
+# 新しい Key を作成し、制限を追加
+gcloud services api-keys create --display-name="firebase-web-restricted" \
+  --allowed-referrers="https://your-domain.com/*" \
+  --api-target=service=firestore.googleapis.com \
+  --api-target=service=identitytoolkit.googleapis.com
+```
+
 ## AI-Specific Security
 
 | Risk | Mitigation |
 |------|------------|
 | Prompt injection | Input validation + output sanitization |
-| API key leakage | Secret Manager + key rotation |
+| API key leakage | Secret Manager + key rotation + `firebase-applet-config.json` サニタイズ |
 | Cost explosion | Budget alerts + quota limits |
 | Data exfiltration via prompts | Log and monitor all Gemini API calls |
 | Model abuse | Rate limiting per user |
@@ -91,7 +115,9 @@ gcloud run deploy my-gemini-app \
 
 ## Common Mistakes
 
+- **`firebase-applet-config.json` を未サニタイズでコミット** — AI Studio デフォルトで `apiKey` が平文。`export-from-ai-studio` で必ず環境変数化する
 - **Using default compute SA** — Has `roles/editor` by default, way too broad
 - **API key in Dockerfile ENV** — Baked into image layer, visible in registry
+- **Firebase Web API Key に制限なし** — リファラー制限と API 制限を必ず設定
 - **No budget alerts** — A prompt injection loop can burn through API quota fast
 - **`--allow-unauthenticated` on internal services** — Only for public-facing endpoints
