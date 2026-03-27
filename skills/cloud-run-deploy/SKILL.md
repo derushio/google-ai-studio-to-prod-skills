@@ -42,11 +42,14 @@ Deploy a Gemini API application to Google Cloud Run with production-ready config
 
 ## Architecture
 
-```
-Client → Cloud Run (auto-scaling) → Gemini API
-                ↓
-         Secret Manager (API key)
-```
+| Layer | Component | Role |
+|-------|-----------|------|
+| Client | Browser / API consumer | リクエスト送信 |
+| Compute | **Cloud Run** (auto-scaling) | アプリケーション実行 |
+| AI | Gemini API | モデル推論 |
+| Secrets | Secret Manager | API Key 管理 |
+
+> **Flow:** Client → Cloud Run → Gemini API / Cloud Run ← Secret Manager
 
 ## Common Mistakes
 

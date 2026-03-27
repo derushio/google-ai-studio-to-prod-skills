@@ -24,42 +24,43 @@ AI Studio Apps are deployed on a shared GCP project managed by Google. This skil
 
 This skill follows a **plan-then-execute** approach: analyze the project, present the plan, generate all files upon approval.
 
-```
-Phase 1: Analyze (automatic)
-  ├── Detect framework (Express/Vite, Next.js, Flask, FastAPI, etc.)
-  ├── Detect runtime (Node.js version, Python version)
-  ├── Read firebase-applet-config.json → extract project ID, database ID
-  ├── Read package.json / requirements.txt → detect build commands, port
-  ├── Read firestore.rules → collect security rules
-  ├── Read server entry point → detect PORT usage, static file serving
-  └── Scan for environment variables (GEMINI_API_KEY, APP_URL, etc.)
+### Phase 1: Analyze (automatic)
 
-Phase 2: Present choices to user
-  ├── Firebase project strategy:
-  │   (a) Create new Firebase project (full independence)
-  │   (b) Continue using AI Studio's project (gen-lang-client-*)
-  ├── IaC tool:
-  │   (a) Terraform
-  │   (b) Pulumi (TypeScript)
-  │   (c) gcloud + firebase CLI scripts
-  └── GCP region (default: asia-northeast1)
+- Detect framework (Express/Vite, Next.js, Flask, FastAPI, etc.)
+- Detect runtime (Node.js version, Python version)
+- Read `firebase-applet-config.json` → extract project ID, database ID
+- Read `package.json` / `requirements.txt` → detect build commands, port
+- Read `firestore.rules` → collect security rules
+- Read server entry point → detect PORT usage, static file serving
+- Scan for environment variables (`GEMINI_API_KEY`, `APP_URL`, etc.)
 
-Phase 3: Present plan → get approval
+### Phase 2: Present choices to user
 
-Phase 3.5: Sanitize firebase-applet-config.json
-  ├── apiKey を削除し、プレースホルダーに置換
-  ├── コード側で環境変数から注入するよう修正
-  └── git history に残っている場合は警告を表示
+| Choice | Options |
+|--------|---------|
+| **Firebase project** | (a) Create new Firebase project (full independence) / (b) Continue using AI Studio's project (`gen-lang-client-*`) |
+| **IaC tool** | (a) Terraform / (b) Pulumi (TypeScript) / (c) gcloud + firebase CLI scripts |
+| **GCP region** | default: `asia-northeast1` |
 
-Phase 4: Generate all files
-  ├── Dockerfile (multi-stage) + .dockerignore
-  ├── IaC files (based on choice)
-  ├── .github/workflows/deploy.yml
-  ├── firebase.json + .firebaserc
-  ├── firestore.indexes.json (inferred from code queries)
-  ├── .env.example (updated with all detected env vars)
-  └── README section: deployment instructions
-```
+### Phase 3: Present plan → get approval
+
+### Phase 3.5: Sanitize firebase-applet-config.json
+
+- `apiKey` を削除し、プレースホルダーに置換
+- コード側で環境変数から注入するよう修正
+- git history に残っている場合は警告を表示
+
+### Phase 4: Generate all files
+
+| File | Description |
+|------|-------------|
+| `Dockerfile` + `.dockerignore` | Multi-stage build |
+| IaC files | Based on user's choice (Terraform / Pulumi / CLI scripts) |
+| `.github/workflows/deploy.yml` | CI/CD pipeline |
+| `firebase.json` + `.firebaserc` | Firebase deploy config |
+| `firestore.indexes.json` | Inferred from code queries |
+| `.env.example` | Updated with all detected env vars |
+| README section | Deployment instructions |
 
 ## Phase 1: Project Analysis
 
