@@ -1,29 +1,26 @@
 {
-  "name": "google-ai-studio-to-prod-skills",
-  "display_name": "Google AI Studio to Production",
-  "description": "Skills for deploying Google AI Studio prototypes to production on GCP, Vercel, and Railway with CI/CD, monitoring, and security hardening.",
-  "version": "0.1.0",
-  "author": "takuro",
-  "license": "MIT",
-  "homepage": "https://github.com/takuro/google-ai-studio-to-prod-skills",
-  "keywords": [
-    "google-ai-studio",
-    "gemini",
-    "cloud-run",
-    "gcp",
-    "production",
-    "deployment",
-    "ci-cd",
-    "monitoring"
-  ],
-  "skills": [
-    "skills/export-from-ai-studio",
-    "skills/repo-initializer-google",
-    "skills/graduate-from-ai-studio",
-    "skills/cloud-run-deploy",
-    "skills/vercel-railway-deploy",
-    "skills/ci-cd-github-actions",
-    "skills/monitoring-sentry-datadog",
-    "skills/security-hardening-gcp"
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "google-ai-studio-to-prod",
+  "description": "Skills for graduating Google AI Studio prototypes to production on GCP",
+  "owner": {
+    "name": "takuro"
+  },
+  "plugins": [
+    {
+      "name": "google-ai-studio-to-prod",
+      "description": "Skills for graduating Google AI Studio prototypes to production — Cloud Run, CI/CD, monitoring, and security hardening on GCP",
+      "source": "./",
+      "skills": [
+        "./skills/analyze-and-document",
+        "./skills/export-from-ai-studio",
+        "./skills/repo-initializer-google",
+        "./skills/graduate-from-ai-studio",
+        "./skills/cloud-run-deploy",
+        "./skills/vercel-railway-deploy",
+        "./skills/ci-cd-github-actions",
+        "./skills/monitoring-sentry-datadog",
+        "./skills/security-hardening-gcp"
+      ]
+    }
   ]
 }

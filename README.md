@@ -10,6 +10,7 @@ Google AI Studio is great for rapid prototyping with Gemini models. But moving f
 
 | Skill | Description | Trigger Examples |
 |-------|-------------|------------------|
+| **[analyze-and-document](skills/analyze-and-document/)** | **プロジェクト分析 → CLAUDE.md 生成（最初にやるべきこと）** | **"プロジェクト分析して", "CLAUDE.md作って", "analyze this project"** |
 | [export-from-ai-studio](skills/export-from-ai-studio/) | Extract and structure code from AI Studio exports | "AI Studioからコード持ってきて", "export my AI Studio project" |
 | [repo-initializer-google](skills/repo-initializer-google/) | Initialize a GitHub repo with Google Cloud best practices | "リポジトリ作って", "set up a new repo for my Gemini app" |
 | **[graduate-from-ai-studio](skills/graduate-from-ai-studio/)** | **All-in-one: Dockerfile + IaC + CI/CD + Firebase config generation** | **"AI Studioから卒業", "make this independently deployable"** |
@@ -24,11 +25,13 @@ Google AI Studio is great for rapid prototyping with Gemini models. But moving f
 ```
 AI Studio prototype
     ↓
+0. analyze-and-document        — ★ まず最初に！プロジェクト全体分析 → CLAUDE.md 生成
+    ↓
 1. export-from-ai-studio       — コードを抽出・整形
     ↓
 2. repo-initializer-google     — GitHub リポ作成 + 初期構成
     ↓
-3. graduate-from-ai-studio     — ★ 一括卒業 (Dockerfile + IaC + CI/CD + Firebase)
+3. graduate-from-ai-studio     — 一括卒業 (Dockerfile + IaC + CI/CD + Firebase)
     ↓                              Terraform / Pulumi / CLI スクリプトから選択
     ↓                              GitHub Actions 自動デプロイ構築
     ↓
@@ -46,13 +49,26 @@ AI Studio prototype
 
 ## Installation
 
-Add this as a skill source in your Claude Code configuration:
+### Via `npx skills` CLI (recommended)
 
 ```bash
-claude skill add --source github:takuro/google-ai-studio-to-prod-skills
+# Install all skills
+npx skills add takuro/google-ai-studio-to-prod-skills
+
+# Install a specific skill only
+npx skills add takuro/google-ai-studio-to-prod-skills --skill graduate-from-ai-studio
+
+# For Claude Code specifically
+npx skills add takuro/google-ai-studio-to-prod-skills -a claude-code -y
 ```
 
-Or clone and reference locally:
+### Via Claude Code `/install` command
+
+```
+/install takuro/google-ai-studio-to-prod-skills
+```
+
+### Manual (clone and reference locally)
 
 ```bash
 git clone https://github.com/takuro/google-ai-studio-to-prod-skills.git
