@@ -20,7 +20,8 @@
         "./skills/ci-cd-github-actions",
         "./skills/monitoring-sentry-datadog",
         "./skills/security-hardening-gcp",
-        "./skills/setup-dev-environment"
+        "./skills/setup-dev-environment",
+        "./skills/migrate-wizard"
       ]
     }
   ]
