@@ -1,24 +1,24 @@
 # Google AI Studio to Production Skills
 
-Claude Code skills for taking Google AI Studio prototypes to production-ready deployments.
+Google AI Studio のプロトタイプを本番環境に持っていくための Claude Code スキル集。
 
 ## Overview
 
-Google AI Studio is great for rapid prototyping with Gemini models. But moving from "it works in the playground" to "it runs reliably in production" requires infrastructure, CI/CD, monitoring, and security — all of which these skills automate.
+Google AI Studio は Gemini モデルを使った高速プロトタイピングに最適ですが、「プレイグラウンドで動く」から「本番で安定稼働する」までには、プロジェクト分析・コード整形・インフラ構築・CI/CD・監視・セキュリティが必要です。これらをスキルで自動化します。
 
 ## Skills
 
 | Skill | Description | Trigger Examples |
 |-------|-------------|------------------|
-| **[analyze-and-document](skills/analyze-and-document/)** | **プロジェクト分析 → CLAUDE.md 生成（最初にやるべきこと）** | **"プロジェクト分析して", "CLAUDE.md作って", "analyze this project"** |
-| [export-from-ai-studio](skills/export-from-ai-studio/) | Extract and structure code from AI Studio exports | "AI Studioからコード持ってきて", "export my AI Studio project" |
-| [repo-initializer-google](skills/repo-initializer-google/) | Initialize a GitHub repo with Google Cloud best practices | "リポジトリ作って", "set up a new repo for my Gemini app" |
-| **[graduate-from-ai-studio](skills/graduate-from-ai-studio/)** | **All-in-one: Dockerfile + IaC + CI/CD + Firebase config generation** | **"AI Studioから卒業", "make this independently deployable"** |
-| [cloud-run-deploy](skills/cloud-run-deploy/) | Deploy to Google Cloud Run with production-ready config | "Cloud Runにデプロイして", "deploy this to Cloud Run" |
-| [vercel-railway-deploy](skills/vercel-railway-deploy/) | Deploy to Vercel or Railway | "Vercelにデプロイ", "deploy to Railway" |
-| [ci-cd-github-actions](skills/ci-cd-github-actions/) | Set up GitHub Actions CI/CD pipelines | "CI/CD設定して", "add GitHub Actions" |
-| [monitoring-sentry-datadog](skills/monitoring-sentry-datadog/) | Add monitoring with Sentry and/or Datadog | "監視入れて", "add error tracking", "set up monitoring" |
-| [security-hardening-gcp](skills/security-hardening-gcp/) | Harden GCP security (IAM, Secret Manager, etc.) | "セキュリティ設定して", "secure my GCP deployment" |
+| **[analyze-and-document](skills/analyze-and-document/)** | プロジェクト全体分析 → CLAUDE.md 生成（最初にやるべきこと） | "プロジェクト分析して", "CLAUDE.md作って", "analyze this project" |
+| [export-from-ai-studio](skills/export-from-ai-studio/) | AI Studio エクスポートのコード抽出・整形・API Key サニタイズ | "AI Studioからコード持ってきて", "export my AI Studio project" |
+| [repo-initializer-google](skills/repo-initializer-google/) | GitHub リポ作成 + .gitignore / README / GCP 向け初期構成 | "リポジトリ作って", "set up a new repo for my Gemini app" |
+| **[graduate-from-ai-studio](skills/graduate-from-ai-studio/)** | 一括卒業: Dockerfile + IaC + CI/CD + Firebase 設定を一括生成 | "AI Studioから卒業", "make this independently deployable" |
+| [cloud-run-deploy](skills/cloud-run-deploy/) | Google Cloud Run へのデプロイ（Secret Manager, IAM 込み） | "Cloud Runにデプロイして", "deploy this to Cloud Run" |
+| [vercel-railway-deploy](skills/vercel-railway-deploy/) | Vercel / Railway へのデプロイ | "Vercelにデプロイ", "deploy to Railway" |
+| [ci-cd-github-actions](skills/ci-cd-github-actions/) | GitHub Actions CI/CD パイプライン構築 | "CI/CD設定して", "add GitHub Actions" |
+| [monitoring-sentry-datadog](skills/monitoring-sentry-datadog/) | Sentry / Datadog による監視・エラートラッキング | "監視入れて", "add error tracking", "set up monitoring" |
+| [security-hardening-gcp](skills/security-hardening-gcp/) | GCP セキュリティ強化（IAM, Secret Manager, API Key 制限） | "セキュリティ設定して", "secure my GCP deployment" |
 
 ## Typical Workflow
 
@@ -26,8 +26,9 @@ Google AI Studio is great for rapid prototyping with Gemini models. But moving f
 AI Studio prototype
     ↓
 0. analyze-and-document        — ★ まず最初に！プロジェクト全体分析 → CLAUDE.md 生成
+    ↓                              アーキテクチャ、データモデル、API、セキュリティ問題を把握
     ↓
-1. export-from-ai-studio       — コードを抽出・整形
+1. export-from-ai-studio       — コードを抽出・整形、firebase-applet-config.json の apiKey サニタイズ
     ↓
 2. repo-initializer-google     — GitHub リポ作成 + 初期構成
     ↓
@@ -41,6 +42,16 @@ AI Studio prototype
 ```
 
 > **Note:** `graduate-from-ai-studio` は `cloud-run-deploy` と `ci-cd-github-actions` の機能を統合しています。個別のスキルは単体でも利用可能です。
+
+## Security
+
+AI Studio が生成するプロジェクトには以下のセキュリティ上の注意点があります:
+
+- **`firebase-applet-config.json` に平文 API Key** — `export-from-ai-studio` で環境変数に外出し
+- **Gemini API Key がハードコードされる場合がある** — Secret Manager へ移行
+- **Firebase Web API Key に利用制限なし** — Google Cloud Console でリファラー制限を設定
+
+詳細は [security-hardening-gcp](skills/security-hardening-gcp/) スキルを参照。
 
 ## Documentation
 
@@ -77,9 +88,9 @@ git clone https://github.com/takuro/google-ai-studio-to-prod-skills.git
 ## Requirements
 
 - Claude Code CLI
-- Google Cloud SDK (`gcloud`) — for GCP-related skills
-- GitHub CLI (`gh`) — for repo initialization and CI/CD
-- Node.js 18+ or Python 3.11+ — depending on your AI Studio export
+- Google Cloud SDK (`gcloud`) — GCP 関連スキルに必要
+- GitHub CLI (`gh`) — リポ初期化・CI/CD に必要
+- Node.js 18+ or Python 3.11+ — AI Studio エクスポートに依存
 
 ## License
 
