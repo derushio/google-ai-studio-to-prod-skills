@@ -1,0 +1,22 @@
+{
+  "name": "google-ai-studio-to-prod",
+  "description": "Skills for graduating Google AI Studio prototypes to production — Cloud Run, CI/CD, monitoring, and security hardening on GCP",
+  "version": "0.1.0",
+  "author": {
+    "name": "takuro"
+  },
+  "homepage": "https://github.com/takuro/google-ai-studio-to-prod-skills",
+  "repository": "https://github.com/takuro/google-ai-studio-to-prod-skills",
+  "license": "MIT",
+  "keywords": [
+    "google-ai-studio",
+    "gemini",
+    "cloud-run",
+    "gcp",
+    "production",
+    "deployment",
+    "ci-cd",
+    "monitoring",
+    "firebase"
+  ]
+}
